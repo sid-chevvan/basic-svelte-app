@@ -1,77 +1,64 @@
 <script>
   import { onMount } from 'svelte';
-  import { fetchArtworks } from './lib/api.js';
-  import GalleryList from './lib/GalleryList.svelte';
-  import ArtworkDetail from './lib/ArtworkDetail.svelte';
+  import { fetchBreweries } from './lib/api.js';
+  import BreweryTable from './lib/BreweryTable.svelte';
+  import BreweryDetail from './lib/BreweryDetail.svelte';
 
-  let artworks = $state([]);
+  let breweries = $state([]);
   let loading = $state(true);
-  let loadingMore = $state(false);
-  let page = $state(1);
-  let selectedArtworkId = $state(null);
+  let selectedBreweryId = $state(null);
 
-  async function loadInitial() {
+  onMount(async () => {
     loading = true;
-    const data = await fetchArtworks(1);
-    artworks = data.artworks;
+    breweries = await fetchBreweries();
     loading = false;
-  }
-
-  async function loadMore() {
-    loadingMore = true;
-    page += 1;
-    const data = await fetchArtworks(page);
-    artworks = [...artworks, ...data.artworks];
-    loadingMore = false;
-  }
-
-  onMount(() => {
-    loadInitial();
   });
 
   function handleSelect(id) {
-    selectedArtworkId = id;
+    selectedBreweryId = id;
     window.scrollTo(0, 0);
   }
 
   function handleBack() {
-    selectedArtworkId = null;
+    selectedBreweryId = null;
   }
 </script>
 
 <main class="container">
   <header>
-    <h1>Art Explorer</h1>
-    <p>Viewing data from the Art Institute of Chicago API</p>
+    <h1>Texas Breweries Directory</h1>
+    <p>A simple list of breweries in the State of Texas</p>
   </header>
 
-  {#if selectedArtworkId}
-    <ArtworkDetail artworkId={selectedArtworkId} onBack={handleBack} />
+  {#if selectedBreweryId}
+    <BreweryDetail breweryId={selectedBreweryId} onBack={handleBack} />
+  {:else if loading}
+    <p class="loading">Loading table data...</p>
   {:else}
-    <GalleryList 
-      {artworks} 
-      {loading} 
-      onSelectArtwork={handleSelect}
-      {loadMore}
-      {loadingMore}
-    />
+    <BreweryTable {breweries} onSelect={handleSelect} />
   {/if}
 </main>
 
 <style>
   header {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0056b3;
   }
 
   h1 {
-    color: var(--primary-color);
+    color: #0056b3;
     margin-bottom: 5px;
   }
 
   p {
-    color: #666;
+    color: #555;
     margin: 0;
+  }
+
+  .loading {
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 40px;
   }
 </style>
