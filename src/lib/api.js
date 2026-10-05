@@ -1,21 +1,11 @@
-export async function fetchBreweries() {
+export async function fetchBusStops() {
   try {
-    const response = await fetch('https://api.openbrewerydb.org/v1/breweries?by_state=texas&per_page=50');
+    // We fetch from the static JSON file containing the actual CapMetro Texas bus stops
+    const response = await fetch('/stops.json');
     if (!response.ok) throw new Error('Failed to fetch data');
     return await response.json();
   } catch (error) {
     console.error('Error fetching data:', error);
     return [];
-  }
-}
-
-export async function fetchBreweryDetail(id) {
-  try {
-    const response = await fetch(`https://api.openbrewerydb.org/v1/breweries/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch details');
-    return await response.json();
-  } catch (error) {
-    console.error(`Error fetching details for ${id}:`, error);
-    return null;
   }
 }

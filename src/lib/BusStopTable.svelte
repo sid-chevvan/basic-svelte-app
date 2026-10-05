@@ -1,26 +1,26 @@
 <script>
-  let { breweries, onSelect } = $props();
+  let { busStops } = $props();
 </script>
 
 <div class="table-container">
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>City</th>
-        <th>Type</th>
-        <th>Action</th>
+        <th>Stop ID</th>
+        <th>Stop Name</th>
+        <th>Description</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
       </tr>
     </thead>
     <tbody>
-      {#each breweries as brewery}
+      {#each busStops as stop}
         <tr>
-          <td>{brewery.name}</td>
-          <td>{brewery.city}</td>
-          <td>{brewery.brewery_type}</td>
-          <td>
-            <button onclick={() => onSelect(brewery.id)}>View Details</button>
-          </td>
+          <td>{stop.stop_id}</td>
+          <td>{stop.stop_name}</td>
+          <td>{stop.stop_desc || 'N/A'}</td>
+          <td>{stop.stop_lat}</td>
+          <td>{stop.stop_lon}</td>
         </tr>
       {/each}
     </tbody>
@@ -53,19 +53,5 @@
 
   tr:hover {
     background-color: #f9f9f9;
-  }
-
-  button {
-    padding: 6px 12px;
-    font-size: 0.9rem;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #004494;
   }
 </style>

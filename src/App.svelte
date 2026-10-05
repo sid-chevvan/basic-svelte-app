@@ -1,41 +1,28 @@
 <script>
   import { onMount } from 'svelte';
-  import { fetchBreweries } from './lib/api.js';
-  import BreweryTable from './lib/BreweryTable.svelte';
-  import BreweryDetail from './lib/BreweryDetail.svelte';
+  import { fetchBusStops } from './lib/api.js';
+  import BusStopTable from './lib/BusStopTable.svelte';
 
-  let breweries = $state([]);
+  let busStops = $state([]);
   let loading = $state(true);
-  let selectedBreweryId = $state(null);
 
   onMount(async () => {
     loading = true;
-    breweries = await fetchBreweries();
+    busStops = await fetchBusStops();
     loading = false;
   });
-
-  function handleSelect(id) {
-    selectedBreweryId = id;
-    window.scrollTo(0, 0);
-  }
-
-  function handleBack() {
-    selectedBreweryId = null;
-  }
 </script>
 
 <main class="container">
   <header>
-    <h1>Texas Breweries Directory</h1>
-    <p>A simple list of breweries in the State of Texas</p>
+    <h1>Texas Bus Stops Data</h1>
+    <p>A simple table listing official Capital Metro bus stops in Texas</p>
   </header>
 
-  {#if selectedBreweryId}
-    <BreweryDetail breweryId={selectedBreweryId} onBack={handleBack} />
-  {:else if loading}
+  {#if loading}
     <p class="loading">Loading table data...</p>
   {:else}
-    <BreweryTable {breweries} onSelect={handleSelect} />
+    <BusStopTable {busStops} />
   {/if}
 </main>
 
